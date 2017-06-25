@@ -36,7 +36,8 @@
   "homepage": "https://github.com/j3lte/pi-zero-temp-resin#readme",
   "dependencies": {
     "express": "*",
-    "thingspeakclient": "https://github.com/j3lte/thingspeakclient_node.git"
+    "thingspeakclient": "https://github.com/j3lte/thingspeakclient_node.git",
+    "node-dht-sensor": "*"
   },
   "devDependencies": {
     "eslint": "^4.1.0",

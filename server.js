@@ -1,5 +1,6 @@
 const express = require('express');
 const execSync = require('child_process').execSync;
+const DHTSensor = require('./dhtsensor');
 
 let thingsReady = false;
 
@@ -68,6 +69,15 @@ app.get('/', (req, res) => {
       description: 'Temperature in Celcius'
     }
   });
+});
+
+app.get('/dht', (req, res) => {
+  if (DHTSensor.sensor !== null) {
+    const data = DHTSensor.read();
+    res.json(data);
+  } else {
+    res.send(500, 'DHT Sensor is not enabled. Please set DHT_SENSOR_PIN and DHT_SENSOR_TYPE');
+  }
 });
 
 app.get('/start', (req, res) => {
