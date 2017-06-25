@@ -76,7 +76,7 @@ app.get('/dht', (req, res) => {
     const data = DHTSensor.read();
     res.json(data);
   } else {
-    res.send(500, 'DHT Sensor is not enabled. Please set DHT_SENSOR_PIN and DHT_SENSOR_TYPE');
+    res.status(500).send('DHT Sensor is not enabled. Please set DHT_SENSOR_PIN and DHT_SENSOR_TYPE');
   }
 });
 
