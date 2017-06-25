@@ -1,0 +1,48 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-python
+
+ENV NODE_VERSION 7.9.0
+
+RUN echo '>>> Install dependencies'
+RUN apt-get update && apt-get install -yq \
+  i2c-tools \
+  cron \
+  python-smbus && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# INSTALL NODE
+RUN echo '>>> Install NodeJS'
+RUN curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-armv6l.tar.gz" \
+  && echo "c3058ba99f18bf8db7798a171a0709fc3e4b1c1f6d80f0673496ac325c9a1911  node-v7.9.0-linux-armv6l.tar.gz" | sha256sum -c - \
+  && tar -xzf "node-v$NODE_VERSION-linux-armv6l.tar.gz" -C /usr/local --strip-components=1 \
+  && rm "node-v$NODE_VERSION-linux-armv6l.tar.gz" \
+  && npm config set unsafe-perm true -g --unsafe-perm \
+  && rm -rf /tmp/*
+
+# ADD MODULES
+RUN echo '>>> Enable I2C'
+COPY scripts/build.sh build.sh
+RUN chmod +x ./build.sh
+RUN ./build.sh
+
+# Defines our working directory in container
+WORKDIR /usr/src/app
+
+# Copies the package.json first for better cache on later pushes
+COPY package.json package.json
+
+# This install npm dependencies on the resin.io build server,
+# making sure to clean up the artifacts it creates in order to reduce the image size.
+RUN JOBS=MAX npm install --production --unsafe-perm && npm cache clean && rm -rf /tmp/*
+
+# This will copy all files in our root to the working  directory in the container
+COPY . ./
+RUN chmod +x ./tmp102.py
+
+# Enable systemd init system in container
+ENV INITSYSTEM on
+
+# Check wifi every 5 minutes. If failed, reboot it
+RUN echo "*/5 * * * * /usr/src/app/scripts/check_wifi_and_reboot_if_fail.sh" | crontab
+
+# server.js will run when container starts up on the device
+CMD ["npm", "start"]

@@ -1,0 +1,45 @@
+{
+  "name": "pi-zero-temp-resin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Push TMP102 values to Thingspeak through Resin",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j3lte/pi-zero-temp-resin.git"
+  },
+  "keywords": [
+    "resin.io",
+    "webserver",
+    "nodejs",
+    "expressjs",
+    "thingspeak",
+    "tmp102"
+  ],
+  "author": {
+    "name": "J.W. Lagendijk",
+    "email": "jwlagendijk@gmail.com"
+  },
+  "readmeFilename": "README.md",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/j3lte/pi-zero-temp-resin/master/LICENSE"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/j3lte/pi-zero-temp-resin/issues"
+  },
+  "homepage": "https://github.com/j3lte/pi-zero-temp-resin#readme",
+  "dependencies": {
+    "express": "*",
+    "thingspeakclient": "https://github.com/j3lte/thingspeakclient_node.git"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.0",
+    "eslint-config-node": "^1.6.0"
+  }
+}
